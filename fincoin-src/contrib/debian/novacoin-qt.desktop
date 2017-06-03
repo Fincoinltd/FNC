@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=FinCoin
+Comment=FinCoin P2P Cryptocurrency
+Comment[ru]=FinCoin, P2P криптовалюта
+Comment[fr]=FinCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=FinCoin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/FinCoin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/FinCoin80.xpm
+MimeType=x-scheme-handler/FinCoin;
+Categories=Office;

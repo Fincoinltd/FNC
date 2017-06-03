@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: FinCoin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# FinCoin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable FinCoin service.
+# FinCoin_config (path): Set to /usr/local/etc/FinCoin.conf by default.
+# FinCoin_user:  The user account FinCoin daemon runs as. It uses 'root' user by default.
+# FinCoin_group: The group account FinCoin daemon runs as. It uses 'wheel' group by default.
+# FinCoin_datadir (str): Default to "/var/db/FinCoin". Base data directory.
+
+. /etc/rc.subr
+
+name=FinCoin
+rcvar=FinCoin_enable
+
+: ${FinCoin_enable:=NO}
+: ${FinCoin_config=/usr/local/etc/FinCoin.conf}
+: ${FinCoin_datadir=/var/db/FinCoin}
+: ${FinCoin_user="root"}
+: ${FinCoin_group="wheel"}
+
+required_files=${FinCoin_config}
+command=/usr/local/bin/FinCoind
+FinCoin_chdir=${FinCoin_datadir}
+pidfile="${FinCoin_datadir}/FinCoind.pid"
+stop_cmd=FinCoin_stop
+command_args="-conf=${FinCoin_config} -datadir=${FinCoin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+FinCoin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${FinCoin_datadir}
+	[ $? -eq 0 ] && chown -R ${FinCoin_user}:${FinCoin_group} ${FinCoin_datadir}
+}
+
+FinCoin_prestart()
+{
+	if [ ! -d "${FinCoin_datadir}/." ]; then
+		FinCoin_create_datadir || return 1
+	fi
+}
+
+FinCoin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+FinCoin_stop()
+{
+    FinCoin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${FinCoin_config} -datadir=${FinCoin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

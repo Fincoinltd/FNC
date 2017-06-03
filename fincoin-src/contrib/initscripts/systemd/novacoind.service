@@ -1,0 +1,11 @@
+[Unit]
+Description=FinCoin daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=FinCoin
+ExecStart=/opt/FinCoin/FinCoind
+
+[Install]
+WantedBy=multi-user.target

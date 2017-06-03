@@ -1,0 +1,5 @@
+FinCoin-qt usr/bin
+share/pixmaps/FinCoin32.xpm usr/share/pixmaps
+share/pixmaps/FinCoin80.xpm usr/share/pixmaps
+debian/FinCoin-qt.desktop usr/share/applications
+debian/FinCoin-qt.protocol usr/share/kde4/services/

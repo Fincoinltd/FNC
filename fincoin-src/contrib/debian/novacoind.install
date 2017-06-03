@@ -1,0 +1,2 @@
+debian/bin/FinCoind usr/bin
+src/FinCoind usr/lib/FinCoin
